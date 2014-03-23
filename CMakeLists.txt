@@ -13,6 +13,7 @@ find_package(catkin REQUIRED COMPONENTS
   sensor_msgs
   std_msgs
   std_srvs
+  message_generation
 )
 
 ## System dependencies are found with CMake's conventions
@@ -89,7 +90,7 @@ generate_dynamic_reconfigure_options(
 catkin_package(
 #  INCLUDE_DIRS include
 #  LIBRARIES tum_ardrone1
-  CATKIN_DEPENDS ardrone_autonomy cv_bridge dynamic_reconfigure geometry_msgs roscpp sensor_msgs std_msgs std_srvs
+  CATKIN_DEPENDS ardrone_autonomy cv_bridge dynamic_reconfigure geometry_msgs roscpp sensor_msgs std_msgs std_srvs message_runtime
 #  DEPENDS system_lib
 )
 
@@ -103,7 +104,7 @@ SET(CMAKE_CXX_FLAGS_RELEASE "-O3")
 
 ## Specify additional locations of header files
 ## Your package locations should be listed before other locations
-# include_directories(include)
+ include_directories(include)
 include_directories(
   ${catkin_INCLUDE_DIRS}
 )
@@ -184,7 +185,7 @@ add_executable(drone_stateestimation ${STATEESTIMATION_SOURCE_FILES} ${STATEESTI
 
 set_target_properties(drone_stateestimation PROPERTIES  -D_LINUX -D_REENTRANT -Wall  -O3 -march=nocona -msse3)
 
-add_dependencies(drone_stateestimation tum_ardrone_generate_messages_cpp)
+add_dependencies(drone_stateestimation tum_ardrone_generate_messages_cpp tum_ardrone_gencfg)
 
 target_link_libraries(drone_stateestimation ${PTAM_LIBRARIES} ${catkin_INCLUDE_DIRS} ${catkin_LIBRARIES})
 
@@ -208,7 +209,7 @@ set(AUTOPILOT_HEADER_FILES
 
 add_executable(drone_autopilot ${AUTOPILOT_SOURCE_FILES} ${AUTOPILOT_HEADER_FILES})
 
-add_dependencies(drone_autopilot tum_ardrone_generate_messages_cpp)
+add_dependencies(drone_autopilot tum_ardrone_generate_messages_cpp tum_ardrone_gencfg)
 
  target_link_libraries(drone_autopilot
    ${catkin_LIBRARIES}
@@ -250,7 +251,7 @@ include_directories(${CMAKE_CURRENT_BINARY_DIR})
 
 add_executable(drone_gui ${GUI_SOURCE_FILES} ${GUI_RESOURCE_FILES_CPP} ${GUI_UI_FILES_HPP} ${GUI_HEADER_FILES_HPP})
 
-add_dependencies(drone_gui tum_ardrone_generate_messages_cpp)
+add_dependencies(drone_gui tum_ardrone_generate_messages_cpp tum_ardrone_gencfg)
 
 target_link_libraries(drone_gui ${QT_LIBRARIES} cvd ${catkin_LIBRARIES})
 
